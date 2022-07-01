@@ -1,0 +1,386 @@
+<!DOCTYPE model>
+<Option type="Map">
+  <Option type="Map" name="children">
+    <Option type="Map" name="native:zonalstatisticsfb_1">
+      <Option type="bool" name="active" value="true"/>
+      <Option name="alg_config"/>
+      <Option type="QString" name="alg_id" value="native:zonalstatisticsfb"/>
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="566"/>
+        <Option type="double" name="component_pos_y" value="435"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="Zonal statistics NO2"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="372"/>
+      <Option type="double" name="component_pos_y" value="597"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option name="dependencies"/>
+      <Option type="QString" name="id" value="native:zonalstatisticsfb_1"/>
+      <Option name="outputs"/>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+      <Option type="Map" name="params">
+        <Option type="List" name="COLUMN_PREFIX">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="QString" name="static_value" value="NO2_"/>
+          </Option>
+        </Option>
+        <Option type="List" name="INPUT">
+          <Option type="Map">
+            <Option type="QString" name="parameter_name" value="vector"/>
+            <Option type="int" name="source" value="0"/>
+          </Option>
+        </Option>
+        <Option type="List" name="INPUT_RASTER">
+          <Option type="Map">
+            <Option type="QString" name="parameter_name" value="no2"/>
+            <Option type="int" name="source" value="0"/>
+          </Option>
+        </Option>
+        <Option type="List" name="RASTER_BAND">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="QString" name="static_value" value="1"/>
+          </Option>
+        </Option>
+        <Option type="List" name="STATISTICS">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="List" name="static_value">
+              <Option type="int" value="2"/>
+              <Option type="int" value="4"/>
+              <Option type="int" value="1"/>
+            </Option>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option type="Map" name="native:zonalstatisticsfb_2">
+      <Option type="bool" name="active" value="true"/>
+      <Option name="alg_config"/>
+      <Option type="QString" name="alg_id" value="native:zonalstatisticsfb"/>
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="546"/>
+        <Option type="double" name="component_pos_y" value="763"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="Zonal statistics PM25"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="346"/>
+      <Option type="double" name="component_pos_y" value="808"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option name="dependencies"/>
+      <Option type="QString" name="id" value="native:zonalstatisticsfb_2"/>
+      <Option name="outputs"/>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+      <Option type="Map" name="params">
+        <Option type="List" name="COLUMN_PREFIX">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="QString" name="static_value" value="PM25_"/>
+          </Option>
+        </Option>
+        <Option type="List" name="INPUT">
+          <Option type="Map">
+            <Option type="QString" name="child_id" value="native:zonalstatisticsfb_1"/>
+            <Option type="QString" name="output_name" value="OUTPUT"/>
+            <Option type="int" name="source" value="1"/>
+          </Option>
+        </Option>
+        <Option type="List" name="INPUT_RASTER">
+          <Option type="Map">
+            <Option type="QString" name="parameter_name" value="pm25"/>
+            <Option type="int" name="source" value="0"/>
+          </Option>
+        </Option>
+        <Option type="List" name="RASTER_BAND">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="QString" name="static_value" value="1"/>
+          </Option>
+        </Option>
+        <Option type="List" name="STATISTICS">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="List" name="static_value">
+              <Option type="int" value="1"/>
+              <Option type="int" value="2"/>
+              <Option type="int" value="3"/>
+            </Option>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+    <Option type="Map" name="native:zonalstatisticsfb_3">
+      <Option type="bool" name="active" value="true"/>
+      <Option name="alg_config"/>
+      <Option type="QString" name="alg_id" value="native:zonalstatisticsfb"/>
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="590"/>
+        <Option type="double" name="component_pos_y" value="945"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="Zonal statistics"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="390"/>
+      <Option type="double" name="component_pos_y" value="990"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option name="dependencies"/>
+      <Option type="QString" name="id" value="native:zonalstatisticsfb_3"/>
+      <Option type="Map" name="outputs">
+        <Option type="Map" name="gemeente_pollution_statistics">
+          <Option type="QString" name="child_id" value="native:zonalstatisticsfb_3"/>
+          <Option type="QString" name="color" value=""/>
+          <Option type="Map" name="comment">
+            <Option type="QString" name="color" value=""/>
+            <Option type="QString" name="component_description" value=""/>
+            <Option type="double" name="component_height" value="60"/>
+            <Option type="double" name="component_pos_x" value="0"/>
+            <Option type="double" name="component_pos_y" value="0"/>
+            <Option type="double" name="component_width" value="100"/>
+            <Option type="bool" name="outputs_collapsed" value="true"/>
+            <Option type="bool" name="parameters_collapsed" value="true"/>
+          </Option>
+          <Option type="QString" name="component_description" value="gemeente_pollution_statistics"/>
+          <Option type="double" name="component_height" value="30"/>
+          <Option type="double" name="component_pos_x" value="437.62376980395493"/>
+          <Option type="double" name="component_pos_y" value="1101.1478208602987"/>
+          <Option type="double" name="component_width" value="200"/>
+          <Option type="invalid" name="default_value"/>
+          <Option type="bool" name="mandatory" value="false"/>
+          <Option type="QString" name="name" value="gemeente_pollution_statistics"/>
+          <Option type="QString" name="output_name" value="OUTPUT"/>
+          <Option type="bool" name="outputs_collapsed" value="true"/>
+          <Option type="bool" name="parameters_collapsed" value="true"/>
+        </Option>
+      </Option>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+      <Option type="Map" name="params">
+        <Option type="List" name="COLUMN_PREFIX">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="QString" name="static_value" value="PM10_"/>
+          </Option>
+        </Option>
+        <Option type="List" name="INPUT">
+          <Option type="Map">
+            <Option type="QString" name="child_id" value="native:zonalstatisticsfb_2"/>
+            <Option type="QString" name="output_name" value="OUTPUT"/>
+            <Option type="int" name="source" value="1"/>
+          </Option>
+        </Option>
+        <Option type="List" name="INPUT_RASTER">
+          <Option type="Map">
+            <Option type="QString" name="parameter_name" value="pm10"/>
+            <Option type="int" name="source" value="0"/>
+          </Option>
+        </Option>
+        <Option type="List" name="RASTER_BAND">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="QString" name="static_value" value="1"/>
+          </Option>
+        </Option>
+        <Option type="List" name="STATISTICS">
+          <Option type="Map">
+            <Option type="int" name="source" value="2"/>
+            <Option type="List" name="static_value">
+              <Option type="int" value="1"/>
+              <Option type="int" value="2"/>
+              <Option type="int" value="4"/>
+            </Option>
+          </Option>
+        </Option>
+      </Option>
+    </Option>
+  </Option>
+  <Option type="Map" name="designerParameterValues">
+    <Option type="QgsProcessingOutputLayerDefinition" name="native:zonalstatisticsfb_3:gemeente_pollution_statistics">
+      <Option type="Map">
+        <Option type="Map" name="create_options">
+          <Option type="QString" name="fileEncoding" value="System"/>
+        </Option>
+        <Option type="Map" name="sink">
+          <Option type="bool" name="active" value="true"/>
+          <Option type="int" name="type" value="1"/>
+          <Option type="QString" name="val" value="TEMPORARY_OUTPUT"/>
+        </Option>
+      </Option>
+    </Option>
+    <Option type="QString" name="no2" value="no_2_803b39ca_818d_4608_8f46_d509394845eb"/>
+    <Option type="QString" name="pm10" value="pm_10_5051844f_b859_47f6_89c0_654d6a15e35f"/>
+    <Option type="QString" name="pm25" value="pm_2_5_2dd42674_cdde_4bed_87c5_878dc4c7ba50"/>
+    <Option type="QString" name="vector" value="Remaining_fields_27586927_68e7_4273_b704_841bff2df5aa"/>
+  </Option>
+  <Option name="groupBoxes"/>
+  <Option name="help"/>
+  <Option name="modelVariables"/>
+  <Option type="QString" name="model_group" value=""/>
+  <Option type="QString" name="model_name" value="Zonal_statistics_airpollution"/>
+  <Option type="Map" name="parameterDefinitions">
+    <Option type="Map" name="native:zonalstatisticsfb_3:gemeente_pollution_statistics">
+      <Option type="bool" name="create_by_default" value="true"/>
+      <Option type="int" name="data_type" value="-1"/>
+      <Option type="invalid" name="default"/>
+      <Option type="invalid" name="defaultGui"/>
+      <Option type="QString" name="description" value="gemeente_pollution_statistics"/>
+      <Option type="int" name="flags" value="0"/>
+      <Option type="QString" name="help" value=""/>
+      <Option name="metadata"/>
+      <Option type="QString" name="name" value="native:zonalstatisticsfb_3:gemeente_pollution_statistics"/>
+      <Option type="QString" name="parameter_type" value="sink"/>
+      <Option type="bool" name="supports_append" value="true"/>
+      <Option type="bool" name="supports_non_file_outputs" value="true"/>
+    </Option>
+    <Option type="Map" name="no2">
+      <Option type="invalid" name="default"/>
+      <Option type="invalid" name="defaultGui"/>
+      <Option type="QString" name="description" value="NO2"/>
+      <Option type="int" name="flags" value="0"/>
+      <Option type="QString" name="help" value=""/>
+      <Option name="metadata"/>
+      <Option type="QString" name="name" value="no2"/>
+      <Option type="QString" name="parameter_type" value="raster"/>
+    </Option>
+    <Option type="Map" name="pm10">
+      <Option type="invalid" name="default"/>
+      <Option type="invalid" name="defaultGui"/>
+      <Option type="QString" name="description" value="PM10"/>
+      <Option type="int" name="flags" value="0"/>
+      <Option type="QString" name="help" value=""/>
+      <Option name="metadata"/>
+      <Option type="QString" name="name" value="pm10"/>
+      <Option type="QString" name="parameter_type" value="raster"/>
+    </Option>
+    <Option type="Map" name="pm25">
+      <Option type="invalid" name="default"/>
+      <Option type="invalid" name="defaultGui"/>
+      <Option type="QString" name="description" value="PM25"/>
+      <Option type="int" name="flags" value="0"/>
+      <Option type="QString" name="help" value=""/>
+      <Option name="metadata"/>
+      <Option type="QString" name="name" value="pm25"/>
+      <Option type="QString" name="parameter_type" value="raster"/>
+    </Option>
+    <Option type="Map" name="vector">
+      <Option name="data_types"/>
+      <Option type="invalid" name="default"/>
+      <Option type="invalid" name="defaultGui"/>
+      <Option type="QString" name="description" value="Scale_vector"/>
+      <Option type="int" name="flags" value="0"/>
+      <Option type="QString" name="help" value=""/>
+      <Option name="metadata"/>
+      <Option type="QString" name="name" value="vector"/>
+      <Option type="QString" name="parameter_type" value="vector"/>
+    </Option>
+  </Option>
+  <Option name="parameterOrder"/>
+  <Option type="Map" name="parameters">
+    <Option type="Map" name="no2">
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="906"/>
+        <Option type="double" name="component_pos_y" value="231"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="no2"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="163"/>
+      <Option type="double" name="component_pos_y" value="464"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option type="QString" name="name" value="no2"/>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+    </Option>
+    <Option type="Map" name="pm10">
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="743"/>
+        <Option type="double" name="component_pos_y" value="320"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="pm10"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="144"/>
+      <Option type="double" name="component_pos_y" value="956"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option type="QString" name="name" value="pm10"/>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+    </Option>
+    <Option type="Map" name="pm25">
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="608"/>
+        <Option type="double" name="component_pos_y" value="380"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="pm25"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="137"/>
+      <Option type="double" name="component_pos_y" value="711"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option type="QString" name="name" value="pm25"/>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+    </Option>
+    <Option type="Map" name="vector">
+      <Option type="QString" name="color" value=""/>
+      <Option type="Map" name="comment">
+        <Option type="QString" name="color" value=""/>
+        <Option type="QString" name="component_description" value=""/>
+        <Option type="double" name="component_height" value="60"/>
+        <Option type="double" name="component_pos_x" value="456"/>
+        <Option type="double" name="component_pos_y" value="257"/>
+        <Option type="double" name="component_width" value="100"/>
+        <Option type="bool" name="outputs_collapsed" value="true"/>
+        <Option type="bool" name="parameters_collapsed" value="true"/>
+      </Option>
+      <Option type="QString" name="component_description" value="vector"/>
+      <Option type="double" name="component_height" value="30"/>
+      <Option type="double" name="component_pos_x" value="455"/>
+      <Option type="double" name="component_pos_y" value="312"/>
+      <Option type="double" name="component_width" value="200"/>
+      <Option type="QString" name="name" value="vector"/>
+      <Option type="bool" name="outputs_collapsed" value="true"/>
+      <Option type="bool" name="parameters_collapsed" value="true"/>
+    </Option>
+  </Option>
+</Option>

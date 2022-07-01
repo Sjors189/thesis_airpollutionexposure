@@ -1,0 +1,373 @@
+---
+title: "Airpollution_inequality"
+output: html_document
+---
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(stringr)
+library(caret)
+library(glmnet)
+library(ineq)
+library(ggplot2)
+library(scales)
+library(grid)
+library(rstatix)
+library(ggpubr)
+library(ggpmisc)
+```
+
+
+```{r}
+pc6_statistics <- read.csv("C:/Users/Sjors/Google Drive/School/UU/Thesis/Data/Output/pc6_statistics_highres.csv",sep = ";")
+
+pc6_statistics_clean <-pc6_statistics[c(1,2:4,11:13,37,38,135,137:145)]
+
+
+pc6_statistics_clean$P_NW_MIG_A[pc6_statistics_clean$P_NW_MIG_A == -99997] <- 0
+pc6_statistics_clean$P_NL_ACHTG[pc6_statistics_clean$P_NL_ACHTG == -99997] <- 0
+pc6_statistics_clean$P_WE_MIG_A[pc6_statistics_clean$P_WE_MIG_A == -99997] <- 0
+pc6_statistics_clean$UITKMINAOW[pc6_statistics_clean$UITKMINAOW == -99997] <- 0
+pc6_statistics_clean$VROUW[pc6_statistics_clean$VROUW == -99997] <- 0
+pc6_statistics_clean$MAN[pc6_statistics_clean$MAN == -99997] <- 0
+
+
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(p_VROUW = VROUW/(MAN + VROUW))
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(p_MAN = MAN/ (MAN + VROUW))
+pc6_statistics_clean$p_VROUW[is.na(pc6_statistics_clean$p_VROUW)] <- 0
+pc6_statistics_clean$p_MAN[is.na(pc6_statistics_clean$p_MAN)] <- 0
+
+
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(p_NW = P_NW_MIG_A/100)
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(p_UITKERING = UITKMINAOW/INWONER)
+
+
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(INKOMEN_LAAG = ifelse(M_INKHH == "00-20 laag",1,0) )
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(INKOMEN_LAAG_MIDDEL = ifelse(M_INKHH == "00-40 laag tot onder midden",1,0) )
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(INKOMEN_HOOG = ifelse(M_INKHH == "80-100 hoog",1,0) )
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(INKOMEN_HOOG_MIDDEL = ifelse(M_INKHH == "60-100 boven midden tot hoog",1,0) )
+
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(VROUW_60 = ifelse(p_VROUW >= 0.6 ,1,0) )
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(VROUW_levels = ifelse(p_VROUW >= 0.4 & p_VROUW <= 0.45, "40-45",ifelse(p_VROUW > 0.45 & p_VROUW <= 0.50, "45-50",ifelse(p_VROUW > 0.5 & p_VROUW <= 0.55, "50-55",ifelse(p_VROUW > 0.55 & p_VROUW <= 0.60,"55-60",0)))))
+                                                        
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(MAN_60 = ifelse(p_MAN >= 0.6 ,1,0) )
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(NW_60 = ifelse(p_NW >= 0.6 ,1,0) )
+
+
+pc6_statistics_clean$PM25_mean <- str_replace_all(pc6_statistics_clean$PM25_mean, ",", ".")
+pc6_statistics_clean$PM10_mean <- str_replace_all(pc6_statistics_clean$PM10_mean, ",", ".")
+pc6_statistics_clean$NO2_mean <- str_replace_all(pc6_statistics_clean$NO2_mean, ",", ".")
+
+
+pc6_statistics_clean$PM25_mean <- as.numeric(pc6_statistics_clean$PM25_mean)
+pc6_statistics_clean$PM10_mean <- as.numeric(pc6_statistics_clean$PM10_mean)
+pc6_statistics_clean$NO2_mean <- as.numeric(pc6_statistics_clean$NO2_mean)
+
+pc6_statistics_clean <- pc6_statistics_clean %>% mutate(p_NL = P_NL_ACHTG/100)
+
+pc6_statistics_clean <- pc6_statistics_clean[!(is.na(pc6_statistics_clean$NO2_mean) | pc6_statistics_clean$NO2_mean==""), ]
+
+```
+
+
+
+```{r}
+#subsets
+pc6_thehague <- subset(pc6_statistics_clean,statnaam == "'s-Gravenhage")
+pc6_rotterdam <- subset(pc6_statistics_clean,statnaam == "Rotterdam")
+pc6_amsterdam <- subset(pc6_statistics_clean,statnaam == "Amsterdam")
+pc6_amsterdam <- pc6_amsterdam[!(is.na(pc6_amsterdam$NO2_mean) | pc6_amsterdam$NO2_mean==""), ]
+
+pc6_groupanalysis <- subset(pc6_statistics_clean,M_INKHH == "00-20 laag" | M_INKHH == "00-40 laag tot onder midden" |  M_INKHH == "80-100 hoog" | M_INKHH == "60-100 boven midden tot hoog")
+pc6_groupanalysis_thehague <- subset(pc6_thehague,M_INKHH == "00-20 laag" | M_INKHH == "00-40 laag tot onder midden" |  M_INKHH == "80-100 hoog" | M_INKHH == "60-100 boven midden tot hoog")
+pc6_groupanalysis_rotterdam <- subset(pc6_rotterdam,M_INKHH == "00-20 laag" | M_INKHH == "00-40 laag tot onder midden" |  M_INKHH == "80-100 hoog" | M_INKHH == "60-100 boven midden tot hoog")
+pc6_groupanalysis_amsterdam <- subset(pc6_amsterdam,M_INKHH == "00-20 laag" | M_INKHH == "00-40 laag tot onder midden" |  M_INKHH == "80-100 hoog" | M_INKHH == "60-100 boven midden tot hoog")
+
+
+```
+
+
+```{r}
+
+
+corr_variables <- pc6_statistics_clean[c(12,15,18,20:23)]
+
+corr_result <- cor(corr_variables,use = "complete.obs")
+#corr_result <- as.data.frame(corr_result)
+corr_result
+
+write.excel <- function(x,row.names=FALSE,col.names=TRUE,...) {
+  write.table(x,"clipboard",sep="\t",row.names=row.names,col.names=col.names,...)
+}
+
+write.excel(corr_result)
+
+palette = colorRampPalette(c("green", "white", "red")) (20)
+heatmap(x = corr_result, col = palette, symm = TRUE)
+```
+
+```{r}
+mydata.long <- pc6_statistics_clean[c(10,12,15,18)] 
+
+
+mydata.long <- mydata.long %>%
+  pivot_longer(cols = c(-statnaam), names_to = "variables", values_to = "value")
+mydata.long
+
+
+summ <- mydata.long %>% group_by(statnaam,variables) %>%  summarize(min = round(min(value),1), max = round(max(value),1), mean = round(mean(value),1),sd = round(sd(value),1))
+summ <- summ %>% nest(data=-c(statnaam,variables))
+
+
+# Create the plot
+myplot <- gghistogram(
+  mydata.long, x = "value", outlier.shape = NA,xlab = "Concentration in μg/m3 ", ylab = "Count",
+   palette = "npg", legend = "none", bins = 40,
+  ggtheme = theme_pubr(border = TRUE)
+  ) + 
+  facet_grid(statnaam~variables,scales = "free") 
+  
+myplot <- myplot +  geom_table_npc(data = summ,label =summ$data,npcx = 0.00, npcy = 1, hjust = -0.56, vjust = 1,size=2.5 ) 
+  
+myplot 
+```
+
+```{r}
+#NO2
+for (pc6 in list(pc6_thehague,pc6_rotterdam,pc6_amsterdam))
+{
+    train.data  <- pc6
+    
+    elastic <- train(
+           NO2_mean  ~  p_NW  + p_UITKERING + INKOMEN_LAAG + INKOMEN_HOOG + INKOMEN_LAAG_MIDDEL + INKOMEN_HOOG_MIDDEL + p_MAN + p_VROUW  , data = train.data, method = "glmnet",
+      trControl = trainControl("cv", number = 10),
+      tuneLength = 10
+      )
+    # Model coefficients
+    coefs <-coef(elastic$finalModel, elastic$bestTune$lambda)
+    temp_df <- as.data.frame(as.matrix(coefs))
+    temp_df$city <- pc6$statnaam[1]
+    temp_df$pollutant <- "NO2"
+    temp_df <- cbind(variable = rownames(temp_df), temp_df)
+    rownames(temp_df) <- 1:nrow(temp_df)
+    temp_df$alpha <- elastic$bestTune$alpha
+    temp_df$lambda <- elastic$bestTune$lambda
+    
+    print(temp_df)
+    
+    
+}
+
+#PM25
+for (pc6 in list(pc6_thehague,pc6_rotterdam,pc6_amsterdam))
+{
+    train.data  <- pc6
+    
+    x <- model.matrix(PM25_mean ~ p_NW  + p_UITKERING + INKOMEN_LAAG + INKOMEN_HOOG + INKOMEN_LAAG_MIDDEL + INKOMEN_HOOG_MIDDEL + p_MAN + p_VROUW , train.data)[,-1]
+    y <- train.data$PM25_mean
+    
+    
+    elastic <- train(
+           PM25_mean  ~  p_NW  + p_UITKERING + INKOMEN_LAAG + INKOMEN_HOOG + INKOMEN_LAAG_MIDDEL + INKOMEN_HOOG_MIDDEL + p_MAN + p_VROUW , data = train.data, method = "glmnet",
+      trControl = trainControl("cv", number = 10),
+      tuneLength = 10
+      )
+    # Model coefficients
+    coefs <-coef(elastic$finalModel, elastic$bestTune$lambda)
+    temp_df <- as.data.frame(as.matrix(coefs))
+    temp_df$city <- pc6$statnaam[1]
+    temp_df$pollutant <- "PM25"
+    temp_df <- cbind(variable = rownames(temp_df), temp_df)
+    rownames(temp_df) <- 1:nrow(temp_df)
+    temp_df$alpha <- elastic$bestTune$alpha
+    temp_df$lambda <- elastic$bestTune$lambda
+    
+    print(temp_df)
+    
+}
+#PM10
+for (pc6 in list(pc6_thehague,pc6_rotterdam,pc6_amsterdam))
+{
+    train.data  <- pc6
+    
+    elastic <- train(
+           PM10_mean  ~  p_NW  + p_UITKERING + INKOMEN_LAAG + INKOMEN_HOOG + INKOMEN_LAAG_MIDDEL + INKOMEN_HOOG_MIDDEL + p_MAN + p_VROUW , data = train.data, method = "glmnet",
+      trControl = trainControl("cv", number = 10),
+      tuneLength = 10
+      )
+    # Model coefficients
+    coefs <-coef(elastic$finalModel, elastic$bestTune$lambda)
+    temp_df <- as.data.frame(as.matrix(coefs))
+    temp_df$city <- pc6$statnaam[1]
+    temp_df$pollutant <- "PM10"
+    temp_df <- cbind(variable = rownames(temp_df), temp_df)
+    rownames(temp_df) <- 1:nrow(temp_df)
+    temp_df$alpha <- elastic$bestTune$alpha
+    temp_df$lambda <- elastic$bestTune$lambda
+    
+    print(temp_df)
+    
+    
+}
+
+```
+
+
+```{r}
+
+for (pc6 in list(pc6_groupanalysis_thehague,pc6_groupanalysis_rotterdam,pc6_groupanalysis_amsterdam))
+{
+    cat(pc6$statnaam[1] , "-  N02\n")
+    aov_NO2 <- aov(NO2_mean ~ M_INKHH, data = pc6)
+    print(summary(aov_NO2))
+    tuk <- TukeyHSD(aov_NO2)
+    print(tuk)
+    
+}
+
+for (pc6 in list(pc6_groupanalysis_thehague,pc6_groupanalysis_rotterdam,pc6_groupanalysis_amsterdam))
+{
+    cat(pc6$statnaam[1] , "-  PM25\n")
+    aov_PM25 <- aov(PM25_mean ~ M_INKHH, data = pc6)
+    print(summary(aov_PM25))
+    tuk <- TukeyHSD(aov_PM25)
+    print(tuk)
+    
+}
+
+for (pc6 in list(pc6_groupanalysis_thehague,pc6_groupanalysis_rotterdam,pc6_groupanalysis_amsterdam))
+{
+    cat(pc6$statnaam[1] , "-  PM10\n")
+    aov_PM10 <- aov(PM10_mean ~ M_INKHH, data = pc6)
+    print(summary(aov_PM10))
+    tuk <- TukeyHSD(aov_PM10)
+    print(tuk)
+    
+  }
+```
+```{r}
+# lorenz curve of user contribution
+
+
+#compute Atkinson
+at_index <-ineq(pc6_statistics_clean$NO2_mean, type="Atkinson",parameter = 0.75)
+
+# compute lorenz curve
+lcolc <- Lc(pc6_statistics_clean$NO2_mean,n=pc6_statistics_clean$INWONER)
+lcdf <- data.frame(L = rev(1-lcolc$L), p = lcolc$p, Uprob = c(1:length(lcolc$L)/length(lcolc$L)))
+lcdf
+
+# basic plot with the diagonal line and the L line
+p <- ggplot(lcdf, aes(x = Uprob, y = L)) + geom_line(colour = hcl(h=15, l=65, c=100)) + geom_line(aes(x = p, y = p))
+# compute annotation lines at 50 percent L (uses a heuristic)
+index  <- which(lcdf$L >= 0.499 & lcdf$L <= 0.501)[1]
+
+ypos <- lcdf$L[index]
+yposs <- c(0,ypos)
+xpos <- index/length(lcdf$L)
+xposs <- c(0,xpos)
+ypositions <- data.frame(x = xposs, y = c(ypos,ypos))
+xpositions <- data.frame(x = c(xpos,xpos), y = yposs)
+# add annotation line
+p <- p + geom_line(data = ypositions, aes(x = x, y = y), 
+                   linetype="dashed") + geom_line(data = xpositions, aes(x = x, y = y), 
+                                                  linetype="dashed")
+
+
+p <- p + scale_x_continuous(breaks=c(0, xpos,0.25,0.5,0.75,1),
+                            labels = scales::number_format(accuracy = 0.01)) + scale_y_continuous(
+                                                                            labels = scales::number_format(accuracy = 0.01))
+
+p <- p + theme_minimal() + xlab("Cumulative percentage of population") + ylab("Cumulative percentage of NO2 exposure")  + ggtitle("Lorenz curve: NO2 emission on the total population") + annotate("text", x=0.8, y=0.1, label= paste("Atkinson index:",round(at_index,4)))
+
+p <- p + theme(plot.margin = unit(c(0.5,1,1,1), "cm"), 
+               axis.title.x = element_text(vjust=-1),
+               plot.title = element_text(hjust = 0.5),
+               axis.title.y = element_text(angle=90, vjust=0),
+               panel.grid.minor = element_blank(),
+               plot.background = element_rect(fill = rgb(0.99,0.99,0.99), linetype=0)) 
+
+p
+```
+
+
+
+```{r}
+library(factoextra)
+
+#the hague
+pc6.pca <- prcomp(pc6_thehague[,c(20,22,23)], center = TRUE,scale. = TRUE)
+pc6.pca$rotation
+summary(pc6.pca)
+PCA1 <- as.data.frame(pc6.pca$x[,1])
+PCA1_NO2<-cbind(PCA1,pc6_thehague$NO2_mean)
+colnames(PCA1_NO2) <- c('PC1', 'NO2')
+
+
+fviz_pca_var(pc6.pca,
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE     # Avoid text overlapping
+             )
+
+
+ggplot(PCA1_NO2, aes(x=PC1, y=NO2)) + 
+  geom_point(alpha=0.1)+
+  geom_smooth(method='lm')
+
+
+
+
+#rotterdam
+pc6.pca <- prcomp(pc6_rotterdam[,c(20,22,23)], center = TRUE,scale. = TRUE)
+pc6.pca$rotation
+summary(pc6.pca)
+PCA1 <- as.data.frame(pc6.pca$x[,1])
+PCA1_NO2<-cbind(PCA1,pc6_rotterdam$NO2_mean)
+colnames(PCA1_NO2) <- c('PC1', 'NO2')
+
+
+fviz_pca_var(pc6.pca,
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE     # Avoid text overlapping
+             )
+
+
+ggplot(PCA1_NO2, aes(x=PC1, y=NO2)) + 
+  geom_point(alpha=0.1)+
+  geom_smooth(method='lm')
+
+
+
+
+#Amsterdam
+pc6.pca <- prcomp(pc6_amsterdam[,c(20,22,23)], center = TRUE,scale. = TRUE)
+pc6.pca$rotation
+summary(pc6.pca)
+PCA1 <- as.data.frame(pc6.pca$x[,1])
+PCA1_NO2<-cbind(PCA1,pc6_amsterdam$NO2_mean)
+colnames(PCA1_NO2) <- c('PC1', 'NO2')
+
+fviz_pca_var(pc6.pca,
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE     # Avoid text overlapping
+             )
+
+
+ggplot(PCA1_NO2, aes(x=PC1, y=NO2)) + 
+  geom_point(alpha=0.1)+
+  geom_smooth(method='lm')
+
+
+
+
+
+```
+
+
+
+
